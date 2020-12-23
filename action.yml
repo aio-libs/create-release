@@ -17,7 +17,7 @@ inputs:
   artifact:
     description: Artifact name to upload
     required: false
-    default: dist
+    default: ""
   dist_dir:
     description: Directory name for dists
     required: false
@@ -54,7 +54,7 @@ runs:
   steps:
   - name: Prepare Release Note
     id: note
-    using: aio-libs/get-releasenote@master
+    uses: aio-libs/get-releasenote@master
     with:
       changes_file: ${{ inputs.changes_file }}
       output_file: release_note.md
