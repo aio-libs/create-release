@@ -18,6 +18,10 @@ inputs:
     description: Artifact name to upload
     required: false
     default: dist
+  dist_dir:
+    description: Directory name for dists
+    required: false
+    default: dist
   version:
     description: Release version to extract
     required: false
@@ -61,11 +65,13 @@ runs:
       fix_issue_regex: ${{ inputs.fix_issue_regex }}
       fix_issue_repl: ${{ inputs.fix_issue_repl }}
   - name: Download dists
+    if: ${{ inputs.artifact }}
     uses: actions/download-artifact@v2
     with:
       name: ${{ inputs.artifact }}
-      path: dist
+      path: ${{ inputs.dist_dir }}
   - name: PyPI upload
+    if: ${{ inputs.pypi_token }}
     uses: pypa/gh-action-pypi-publish
     with:
       password: ${{ inputs.pypi_token }}
@@ -73,7 +79,7 @@ runs:
     uses: ncipollo/release-action@v1
     with:
       name: "${{ inputs.name }} ${{ steps.note.outputs.version }}"
-      artifacts: "dist/*"
+      artifacts: "${{ inputs.dist_dir }}/*"
       bodyFile: release_note.md
       prerelease: "${{ steps.note.outputs.prerelease }}"
       token: "${{ inputs.github_token }}
