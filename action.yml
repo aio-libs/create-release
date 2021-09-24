@@ -9,7 +9,7 @@ inputs:
     description: The project name, empty if the name is skipped in CHANGES
     required: true
   github_token:
-    description: GitHub token, e.g. secrets.GITHUB_TOKEN 
+    description: GitHub token, e.g. secrets.GITHUB_TOKEN
     required: true
   pypi_token:
     description: PyPI token used to upload packages
@@ -65,21 +65,31 @@ runs:
       fix_issue_regex: ${{ inputs.fix_issue_regex }}
       fix_issue_repl: ${{ inputs.fix_issue_repl }}
   - name: Download dists
-    if: ${{ inputs.artifact }}
-    uses: actions/download-artifact@v2
-    with:
-      name: ${{ inputs.artifact }}
-      path: ${{ inputs.dist_dir }}
+    run: |
+      if [[ -n "${{ inputs.artifact }}" ]]; then
+        gh run download --name "${{ inputs.artifact }}" --dir "${{ inputs.dist_dir }}"
+      fi
+    shell: bash
+  - name: Install twine
+    run: |
+      if [[ -n "${{ inputs.pypi_token }}" ]]; then
+        pip install twine
+      fi
+    shell: bash
   - name: PyPI upload
-    if: ${{ inputs.pypi_token }}
-    uses: pypa/gh-action-pypi-publish
-    with:
-      password: ${{ inputs.pypi_token }}
+    run: |
+      if [[ -n "${{ inputs.pypi_token }}" ]]; then
+        twine check ${{ inputs.dist_dir }}/*
+        twine upload -u __token__ ${{ inputs.dist_dir }}/*
+      fi
+    env:
+      TWINE_PASSWORD: ${{ inputs.pypi_token }}
+    shell: bash
   - name: GitHub Release
     uses: ncipollo/release-action@v1
     with:
-      name: "${{ inputs.name }} ${{ steps.note.outputs.version }}"
-      artifacts: "${{ inputs.dist_dir }}/*"
+      name: ${{ inputs.name }} ${{ steps.note.outputs.version }}
+      artifacts: ${{ inputs.dist_dir }}/*
       bodyFile: release_note.md
-      prerelease: "${{ steps.note.outputs.prerelease }}"
-      token: "${{ inputs.github_token }}
+      prerelease: ${{ steps.note.outputs.prerelease }}
+      token: ${{ inputs.github_token }}
