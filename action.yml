@@ -64,6 +64,10 @@ runs:
       head_line: ${{ inputs.head_line }}
       fix_issue_regex: ${{ inputs.fix_issue_regex }}
       fix_issue_repl: ${{ inputs.fix_issue_repl }}
+  - name: Login
+    run: |
+      echo "${{ inputs.github_token }}" | gh auth login --with-token
+    shell: bash
   - name: Download dists
     run: |
       if [[ -n "${{ inputs.artifact }}" ]]; then
