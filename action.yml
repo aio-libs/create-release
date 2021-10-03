@@ -52,10 +52,6 @@ branding:
 runs:
   using: composite
   steps:
-  - name: Login
-    run: |
-      echo "${{ inputs.github_token }}" | gh auth login --with-token
-    shell: bash
   - name: Download dists
     run: |
       if [[ -n "${{ inputs.artifact }}" ]]; then
@@ -64,7 +60,7 @@ runs:
     shell: bash
   - name: Prepare Release Note
     id: note
-    uses: aio-libs/get-releasenote@v1.1.3
+    uses: aio-libs/get-releasenote@v1.2.0
     with:
       changes_file: ${{ inputs.changes_file }}
       output_file: release_note.md
@@ -75,7 +71,6 @@ runs:
       fix_issue_regex: ${{ inputs.fix_issue_regex }}
       fix_issue_repl: ${{ inputs.fix_issue_repl }}
       name: ${{ inputs.name }}
-      dist_dir: ${{ inputs.dist_dir }}
   - name: Install twine
     run: |
       if [[ -n "${{ inputs.pypi_token }}" ]]; then
