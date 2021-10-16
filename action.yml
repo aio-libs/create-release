@@ -55,7 +55,7 @@ runs:
   - name: Download dists
     run: |
       if [[ -n "${{ inputs.artifact }}" ]]; then
-        gh run download --name "${{ inputs.artifact }}" --dir "${{ inputs.dist_dir }}"
+        gh run download "${{ github.run_id }}" --name "${{ inputs.artifact }}" --dir "${{ inputs.dist_dir }}"
       fi
     shell: bash
   - name: Prepare Release Note
