@@ -14,10 +14,6 @@ inputs:
   pypi_token:
     description: PyPI token used to upload packages
     required: true
-  artifact:
-    description: Artifact name to upload
-    required: false
-    default: ""
   dist_dir:
     description: Directory name for dists
     required: false
@@ -52,12 +48,6 @@ branding:
 runs:
   using: composite
   steps:
-  - name: Download dists
-    run: |
-      if [[ -n "${{ inputs.artifact }}" ]]; then
-        gh run download "${{ github.run_id }}" --name "${{ inputs.artifact }}" --dir "${{ inputs.dist_dir }}"
-      fi
-    shell: bash
   - name: Prepare Release Note
     id: note
     uses: aio-libs/get-releasenote@v1.2.1
