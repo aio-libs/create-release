@@ -61,20 +61,11 @@ runs:
       fix_issue_regex: ${{ inputs.fix_issue_regex }}
       fix_issue_repl: ${{ inputs.fix_issue_repl }}
       name: ${{ inputs.name }}
-  - name: Install twine
-    run: |
-      if [[ -n "${{ inputs.pypi_token }}" ]]; then
-        pip install twine
-      fi
-    shell: bash
   - name: PyPI upload
-    run: |
-      if [[ -n "${{ inputs.pypi_token }}" ]]; then
-        twine check ${{ inputs.dist_dir }}/*
-        twine upload -u __token__ ${{ inputs.dist_dir }}/*
-      fi
-    env:
-      TWINE_PASSWORD: ${{ inputs.pypi_token }}
+    if: ${{ inputs.pypi_token }}
+    uses: pypa/gh-action-pypi-publish@v1.4.2
+    with:
+      password: ${{ inputs.pypi_token }}
     shell: bash
   - name: GitHub Release
     uses: ncipollo/release-action@v1
