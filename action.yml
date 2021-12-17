@@ -65,6 +65,7 @@ runs:
     if: ${{ inputs.pypi_token }}
     uses: pypa/gh-action-pypi-publish@v1.4.2
     with:
+      packages_dir: ${{ inputs.dist_dir }}
       password: ${{ inputs.pypi_token }}
   - name: GitHub Release
     uses: ncipollo/release-action@v1
