@@ -63,7 +63,7 @@ runs:
       name: ${{ inputs.name }}
   - name: PyPI upload
     if: ${{ inputs.pypi_token }}
-    uses: pypa/gh-action-pypi-publish@v1.4.2
+    uses: pypa/gh-action-pypi-publish@v1.5.0
     with:
       packages_dir: ${{ inputs.dist_dir }}
       password: ${{ inputs.pypi_token }}
