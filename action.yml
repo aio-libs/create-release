@@ -42,6 +42,10 @@ inputs:
     description: Replacement rule for regexps found by fix_issue_regex
     required: false
     default: ''
+  check_ref:
+    description: Perform git tag check to match provided version
+    required: false
+    default: ''
 branding:
   color: yellow
   icon: package
@@ -61,6 +65,8 @@ runs:
       fix_issue_regex: ${{ inputs.fix_issue_regex }}
       fix_issue_repl: ${{ inputs.fix_issue_repl }}
       name: ${{ inputs.name }}
+      disr_dir: ${{ inputs.dist_dir }}
+      check_ref: ${{ inputs.check_ref }}
   - name: PyPI upload
     if: ${{ inputs.pypi_token }}
     uses: pypa/gh-action-pypi-publish@v1.5.0
