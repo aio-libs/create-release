@@ -54,7 +54,7 @@ runs:
   steps:
   - name: Prepare Release Note
     id: note
-    uses: aio-libs/get-releasenote@v1.4.3
+    uses: aio-libs/get-releasenote@v1.4.4
     with:
       changes_file: ${{ inputs.changes_file }}
       output_file: release_note.md
