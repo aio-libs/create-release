@@ -65,7 +65,7 @@ runs:
       fix_issue_regex: ${{ inputs.fix_issue_regex }}
       fix_issue_repl: ${{ inputs.fix_issue_repl }}
       name: ${{ inputs.name }}
-      disr_dir: ${{ inputs.dist_dir }}
+      dist_dir: ${{ inputs.dist_dir }}
       check_ref: ${{ inputs.check_ref }}
   - name: PyPI upload
     if: ${{ inputs.pypi_token }}
